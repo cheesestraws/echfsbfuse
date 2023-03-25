@@ -150,10 +150,10 @@ class Xmp(Fuse):
 			load = 0xfff000000
 			ft = int(t, 16)
 			load |= ft << 8
-			exec = 0
+			exec_a = 0
 			
 			load_str = "%08x" % load
-			exec_str = "%08x" % exec
+			exec_str = "%08x" % exec_a
 			
 			return load_str, exec_str
 		
