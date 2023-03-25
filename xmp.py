@@ -70,7 +70,7 @@ def real_path_of(path):
 			dbg("replacement [" + f + "]/[" + tail + "]")
 			if f == tail:
 				dbg("found it")
-				return head + "/" + f
+				return head + "/" + i
 				
 	return head + path
 	
