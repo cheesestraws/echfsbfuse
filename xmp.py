@@ -32,6 +32,8 @@ fuse.feature_assert('stateful_files', 'has_init')
 
 root_dir = "/"
 
+flog=open("/tmp/flog_ff", 'w')
+
 
 def flag2mode(flags):
     md = {os.O_RDONLY: 'r', os.O_WRONLY: 'w', os.O_RDWR: 'w+'}
@@ -151,6 +153,8 @@ class Xmp(Fuse):
     class XmpFile(object):
 
         def __init__(self, path, flags, *mode):
+        	flog.write("opening " + path + "\n")
+        
             self.file = os.fdopen(os.open("." + path, flags, *mode),
                                   flag2mode(flags))
             self.fd = self.file.fileno()
