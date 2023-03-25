@@ -48,31 +48,22 @@ def dbg(x):
 	flog.flush()
 
 def real_path_of(path):
-	dbg("real_path_of: " + path)
-	
 	# if file exists, just return it
 	if os.path.exists(path):
 		return path
-		
-	dbg("doesn't exist...")
 	
 	# otherwise we need the file name
 	head, tail = os.path.split(path)
-	dbg("path [" + head + "][" + tail + "]")
 	if tail == "":
 		return path
 	
 	for i in os.listdir(head):
-		dbg("examining " + i + " for " + tail);
 		if i.startswith(tail):
-			dbg("startswith")
 			f = re.sub(",[0-9a-fA-F]{3}$", "", i)
-			dbg("replacement [" + f + "]/[" + tail + "]")
 			if f == tail:
-				dbg("found it")
 				return head + "/" + i
 				
-	return head + path
+	return path
 	
 
 class Xmp(Fuse):
@@ -153,6 +144,14 @@ class Xmp(Fuse):
 #            # plus null separators.
 #            return len("".join(aa)) + len(aa)
 #        return aa
+    def listxattr(self, path, size):
+        aa = ["user." + a for a in ("econet_exec", "econet_homeof", "econet_load", "econet_owner", "econet_perm")]
+        if size == 0:
+            # We are asked for size of the attr list, ie. joint size of attrs
+            # plus null separators.
+            return len("".join(aa)) + len(aa)
+        return aa
+
 
     def statfs(self):
         """
@@ -239,28 +238,6 @@ class Xmp(Fuse):
             self.file.truncate(len)
 
         def lock(self, cmd, owner, **kw):
-            # The code here is much rather just a demonstration of the locking
-            # API than something which actually was seen to be useful.
-
-            # Advisory file locking is pretty messy in Unix, and the Python
-            # interface to this doesn't make it better.
-            # We can't do fcntl(2)/F_GETLK from Python in a platfrom independent
-            # way. The following implementation *might* work under Linux. 
-            #
-            # if cmd == fcntl.F_GETLK:
-            #     import struct
-            # 
-            #     lockdata = struct.pack('hhQQi', kw['l_type'], os.SEEK_SET,
-            #                            kw['l_start'], kw['l_len'], kw['l_pid'])
-            #     ld2 = fcntl.fcntl(self.fd, fcntl.F_GETLK, lockdata)
-            #     flockfields = ('l_type', 'l_whence', 'l_start', 'l_len', 'l_pid')
-            #     uld2 = struct.unpack('hhQQi', ld2)
-            #     res = {}
-            #     for i in xrange(len(uld2)):
-            #          res[flockfields[i]] = uld2[i]
-            #  
-            #     return fuse.Flock(**res)
-
             # Convert fcntl-ish lock parameters to Python's weird
             # lockf(3)/flock(2) medley locking API...
             op = { fcntl.F_UNLCK : fcntl.LOCK_UN,
