@@ -30,6 +30,8 @@ fuse.fuse_python_api = (0, 2)
 
 fuse.feature_assert('stateful_files', 'has_init')
 
+root_dir = "/"
+
 
 def flag2mode(flags):
     md = {os.O_RDONLY: 'rb', os.O_WRONLY: 'wb', os.O_RDWR: 'wb+'}
@@ -51,61 +53,55 @@ class Xmp(Fuse):
         #import thread
         #thread.start_new_thread(self.mythread, ())
         self.root = '/'
+        root_dir = self.root
 
     def getattr(self, path):
-        return os.lstat("." + path)
+        return os.lstat(root_dir + path)
 
     def readlink(self, path):
-        return os.readlink("." + path)
+        return os.readlink(root_dir + path)
 
     def readdir(self, path, offset):
-        for e in os.listdir("." + path):
+        for e in os.listdir(root_dir + path):
             yield fuse.Direntry(e)
 
     def unlink(self, path):
-        os.unlink("." + path)
+        os.unlink(root_dir + path)
 
     def rmdir(self, path):
-        os.rmdir("." + path)
+        os.rmdir(root_dir + path)
 
     def symlink(self, path, path1):
-        os.symlink(path, "." + path1)
+        os.symlink(path, root_dir + path1)
 
     def rename(self, path, path1):
-        os.rename("." + path, "." + path1)
+        os.rename("." + path, root_dir + path1)
 
     def link(self, path, path1):
-        os.link("." + path, "." + path1)
+        os.link("." + path, root_dir + path1)
 
     def chmod(self, path, mode):
-        os.chmod("." + path, mode)
+        os.chmod(root_dir + path, mode)
 
     def chown(self, path, user, group):
-        os.chown("." + path, user, group)
+        os.chown(root_dir + path, user, group)
 
     def truncate(self, path, len):
-        f = open("." + path, "a")
+        f = open(root_dir + path, "a")
         f.truncate(len)
         f.close()
 
     def mknod(self, path, mode, dev):
-        os.mknod("." + path, mode, dev)
+        os.mknod(root_dir + path, mode, dev)
 
     def mkdir(self, path, mode):
-        os.mkdir("." + path, mode)
+        os.mkdir(root_dir + path, mode)
 
     def utime(self, path, times):
-        os.utime("." + path, times)
-
-#    The following utimens method would do the same as the above utime method.
-#    We can't make it better though as the Python stdlib doesn't know of
-#    subsecond preciseness in acces/modify times.
-#  
-#    def utimens(self, path, ts_acc, ts_mod):
-#      os.utime("." + path, (ts_acc.tv_sec, ts_mod.tv_sec))
+        os.utime(root_dir + path, times)
 
     def access(self, path, mode):
-        if not os.access("." + path, mode):
+        if not os.access(root_dir + path, mode):
             return -EACCES
 
 #    This is how we could add stub extended attribute handlers...
