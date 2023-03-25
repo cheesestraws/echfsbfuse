@@ -69,7 +69,8 @@ def real_path_of(path):
 			f = re.sub(",[0-9a-fA-F]{3}$", "", i)
 			dbg("replacement [" + f + "]/[" + tail + "]")
 			if f == tail:
-				return f
+				dbg("found it")
+				return head + "/" + f
 				
 	return head + path
 	
