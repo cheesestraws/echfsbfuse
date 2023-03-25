@@ -65,7 +65,9 @@ def real_path_of(path):
 	for i in os.listdir(head):
 		dbg("examining " + i + " for " + tail);
 		if i.startswith(tail):
+			dbg("startswith")
 			f = re.sub(",[0-9a-fA-F]{3}$", "", i)
+			dbg("replacement [" + f + "]/[" + tail + "]")
 			if f == tail:
 				return f
 				
