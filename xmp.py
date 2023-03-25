@@ -58,10 +58,12 @@ def real_path_of(path):
 	
 	# otherwise we need the file name
 	head, tail = os.path.split(path)
+	dbg("path [" + head + "][" + tail + "]")
 	if tail == "":
 		return path
 	
 	for i in os.listdir(head):
+		dbg("examining " + i + " for " + tail);
 		if i.startswith(tail):
 			f = re.sub(",[0-9a-fA-F]{3}$", "", i)
 			if f == tail:
