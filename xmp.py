@@ -48,9 +48,13 @@ def dbg(x):
 	flog.flush()
 
 def real_path_of(path):
+	dbg("real_path_of: " + path)
+	
 	# if file exists, just return it
 	if os.path.exists(path):
 		return path
+		
+	dbg("doesn't exist...")
 	
 	# otherwise we need the file name
 	head, tail = os.path.split(path)
