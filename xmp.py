@@ -34,7 +34,7 @@ root_dir = "/"
 
 
 def flag2mode(flags):
-    md = {os.O_RDONLY: 'rb', os.O_WRONLY: 'wb', os.O_RDWR: 'wb+'}
+    md = {os.O_RDONLY: 'r', os.O_WRONLY: 'w', os.O_RDWR: 'w+'}
     m = md[flags & (os.O_RDONLY | os.O_WRONLY | os.O_RDWR)]
 
     if flags | os.O_APPEND:
@@ -154,7 +154,6 @@ class Xmp(Fuse):
             self.file = os.fdopen(os.open("." + path, flags, *mode),
                                   flag2mode(flags))
             self.fd = self.file.fileno()
-            print("honk")
 
         def read(self, length, offset):
             return os.pread(self.fd, length, offset)
