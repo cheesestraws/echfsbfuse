@@ -42,6 +42,25 @@ def flag2mode(flags):
     return m
 
 
+def real_path_of(path):
+	# if file exists, just return it
+	if os.path.exists(path):
+		return path
+	
+	# otherwise we need the file name
+	head, tail = os.path.split(path)
+	if tail == "":
+		return path
+	
+	for i in os.listdir(head):
+		if i.startswith(tail):
+			f = re.sub(",[0-9a-fA-F]{3}$", "", i)
+			if f == tail:
+				return f
+				
+	return head + path
+	
+
 class Xmp(Fuse):
 
     def __init__(self, *args, **kw):
@@ -147,7 +166,7 @@ class Xmp(Fuse):
     class XmpFile(object):
 
         def __init__(self, path, flags, *mode):
-            self.file = os.fdopen(os.open("." + path, flags, *mode),
+            self.file = os.fdopen(os.open(real_path_of("." + path), flags, *mode),
                                   flag2mode(flags))
             self.fd = self.file.fileno()
             if hasattr(os, 'pread'):
