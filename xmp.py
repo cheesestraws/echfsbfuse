@@ -154,33 +154,13 @@ class Xmp(Fuse):
             self.file = os.fdopen(os.open("." + path, flags, *mode),
                                   flag2mode(flags))
             self.fd = self.file.fileno()
-            if hasattr(os, 'pread'):
-                self.iolock = None
-            else:
-                self.iolock = Lock()
+            print("honk")
 
         def read(self, length, offset):
-            if self.iolock:
-                self.iolock.acquire()
-                try:
-                    self.file.seek(offset)
-                    return self.file.read(length)
-                finally:
-                    self.iolock.release()
-            else:
-                return os.pread(self.fd, length, offset)
+            return os.pread(self.fd, length, offset)
 
         def write(self, buf, offset):
-            if self.iolock:
-                self.iolock.acquire()
-                try:
-                    self.file.seek(offset)
-                    self.file.write(buf)
-                    return len(buf)
-                finally:
-                    self.iolock.release()
-            else:
-                return os.pwrite(self.fd, buf, offset)
+            return os.pwrite(self.fd, buf, offset)
 
         def release(self, flags):
             self.file.close()
