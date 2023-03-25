@@ -154,7 +154,6 @@ class Xmp(Fuse):
 
         def __init__(self, path, flags, *mode):
         	flog.write("opening " + path + "\n")
-			
             self.file = os.fdopen(os.open("." + path, flags, *mode),
                                   flag2mode(flags))
             self.fd = self.file.fileno()
