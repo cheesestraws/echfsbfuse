@@ -64,8 +64,19 @@ def real_path_of(path):
 				return head + "/" + i
 				
 	return path
-	
 
+def type_from_real_path(path):
+	xs = re.findall(",([0-9a-fA-F]{3})$", path)
+	if len(xs) == 0:
+		return ""
+	return xs[0]
+	
+def load_exec_from_real_path(path):
+	xs = re.findall(",([0-9a-fA-F]{8})-([0-9a-fA-F]{8})$", path)
+	if len(xs) == 0:
+		return ()
+	return xs[0]
+	
 class Xmp(Fuse):
 
     def __init__(self, *args, **kw):
@@ -124,6 +135,28 @@ class Xmp(Fuse):
     def access(self, path, mode):
         if not os.access(real_path_of("." + path), mode):
             return -EACCES
+
+	def load_exec(self, path):
+		p = real_path_of("." + path)
+		# real load and exec addresses?
+		le = load_exec_from_real_path(p)
+		if le:
+			return le
+		
+		# filetype?
+		t = type_from_real_path(p)
+		if t != "":
+			# filetype!
+			load = 0xfff000000
+			ft = int(t, 16)
+			load |= ft << 8
+			exec = 0
+			
+			load_str = "%08x" % load
+			exec_str = "%08x" % exec
+			
+			return load_str, exec_str
+		
 
 #    This is how we could add stub extended attribute handlers...
 #    (We can't have ones which aptly delegate requests to the underlying fs
