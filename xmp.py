@@ -80,10 +80,10 @@ class Xmp(Fuse):
         dbg("starting at " + self.root)
 
     def getattr(self, path):
-        return os.lstat("." + path)
+        return os.lstat(real_path_of("." + path))
 
     def readlink(self, path):
-        return os.readlink("." + path)
+        return os.readlink(real_path_of("." + path))
 
     def readdir(self, path, offset):
         for e in os.listdir("." + path):
@@ -91,25 +91,25 @@ class Xmp(Fuse):
             yield fuse.Direntry(e)
 
     def unlink(self, path):
-        os.unlink("." + path)
+        os.unlink(real_path_of("." + path))
 
     def rmdir(self, path):
-        os.rmdir("." + path)
+        os.rmdir(real_path_of("." + path))
 
     def symlink(self, path, path1):
-        os.symlink(path, "." + path1)
+        os.symlink(real_path_of(path), real_path_of("." + path1))
 
     def rename(self, path, path1):
-        os.rename("." + path, "." + path1)
+        os.rename("." + path, real_path_of("." + path1))
 
     def link(self, path, path1):
-        os.link("." + path, "." + path1)
+        os.link("." + path, real_path_of("." + path1))
 
     def chmod(self, path, mode):
-        os.chmod("." + path, mode)
+        os.chmod(real_path_of("." + path), mode)
 
     def chown(self, path, user, group):
-        os.chown("." + path, user, group)
+        os.chown(real_path_of("." + path), user, group)
 
     def truncate(self, path, len):
         f = open("." + path, "a")
@@ -120,13 +120,13 @@ class Xmp(Fuse):
         os.mknod("." + path, mode, dev)
 
     def mkdir(self, path, mode):
-        os.mkdir("." + path, mode)
+        os.mkdir(real_path_of("." + path), mode)
 
     def utime(self, path, times):
-        os.utime("." + path, times)
+        os.utime(real_path_of("." + path), times)
 
     def access(self, path, mode):
-        if not os.access("." + path, mode):
+        if not os.access(real_path_of("." + path), mode):
             return -EACCES
 
 #    This is how we could add stub extended attribute handlers...
@@ -176,6 +176,7 @@ class Xmp(Fuse):
     class XmpFile(object):
 
         def __init__(self, path, flags, *mode):
+        	
             self.file = os.fdopen(os.open(real_path_of("." + path), flags, *mode),
                                   flag2mode(flags))
             self.fd = self.file.fileno()
