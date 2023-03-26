@@ -82,16 +82,11 @@ def load_exec_from_real_path(path):
 	
 def load_exec(path):
 	p = real_path_of("." + path)
-	# real load and exec addresses?
-	
-	dbg("real path " + p)
-	
+	# real load and exec addresses?	
 	le = load_exec_from_real_path(p)
 	if le:
 		return le
-	
-	dbg("not loadexec")
-	
+		
 	# filetype?
 	t = type_from_real_path(p)
 	if t != "":
@@ -102,20 +97,9 @@ def load_exec(path):
 		exec_a = 0
 		
 		# timestamp!
-		info = os.lstat(p)
-		dbg("mtime " + ("%d" % info.st_mtime))
-		
-		dbg("ok...")
-		
+		info = os.lstat(p)		
 		low = int((int(info.st_mtime) & 255) * 100)
-		
-		dbg("low")
-		
 		high = int((info.st_mtime / 256) * 100 + (low >> 8) + 0x336e996a)
-		
-		dbg("hi")
-		
-		dbg("h/l " + ("%d" % high) + " " + ("%d" % low))
 		
 		load |= (high >> 24)
 		exec_a = ((low & 0xff) | (high << 8)) & 0xffffffff
@@ -206,17 +190,13 @@ class Xmp(Fuse):
 #        return aa
     
     def getxattr(self, path, name, size):
-    	dbg("getxattr")
     	if name == "user.econet_exec":
-			dbg("getxattr/exec")
 			load, exec_a = load_exec(path)
-			dbg("exec " + exec_a)
 			if size == 0:
 				return len(exec_a)
 			return exec_a
     	if name == "user.econet_load":
 			load, exec_a = load_exec(path)
-			dbg("load " + load)
 			if size == 0:
 				return len(load)
 			return load
