@@ -100,7 +100,7 @@ def load_exec(path):
 		
 		# timestamp!
 		s = os.lstat(p)
-		dbg("mtime " + s.st_mtime)
+		dbg("mtime " + ("%d" % s.st_mtime))
 		
 		load_str = "%08x" % load
 		exec_str = "%08x" % exec_a
