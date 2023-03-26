@@ -216,6 +216,21 @@ class Xmp(Fuse):
 			if size == 0:
 				return len(load)
 			return load
+		if name == "user.econet_homeof":
+			val = "0000"
+			if size == 0:
+				return len(val)
+			return val
+		if name == "user.econet_owner":
+			val = "0000"
+			if size == 0:
+				return len(val)
+			return val
+		if name == "user.econet_perm":
+			val = "03"
+			if size == 0:
+				return len(val)
+			return val
     
         val = name.swapcase() + '@' + path
         if size == 0:
