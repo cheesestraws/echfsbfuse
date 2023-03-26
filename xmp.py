@@ -77,6 +77,33 @@ def load_exec_from_real_path(path):
 		return ()
 	return xs[0]
 	
+def load_exec(path):
+	p = real_path_of("." + path)
+	# real load and exec addresses?
+	
+	dbg("real path " + p)
+	
+	le = load_exec_from_real_path(p)
+	if le:
+		return le
+	
+	dbg("not loadexec")
+	
+	# filetype?
+	t = type_from_real_path(p)
+	if t != "":
+		# filetype!
+		load = 0xfff000000
+		ft = int(t, 16)
+		load |= ft << 8
+		exec_a = 0
+		
+		load_str = "%08x" % load
+		exec_str = "%08x" % exec_a
+		
+		return load_str, exec_str
+
+	
 class Xmp(Fuse):
 
     def __init__(self, *args, **kw):
@@ -133,34 +160,7 @@ class Xmp(Fuse):
 
     def access(self, path, mode):
         if not os.access(real_path_of("." + path), mode):
-            return -EACCES
-
-	def load_exec(self, path):
-		p = real_path_of("." + path)
-		# real load and exec addresses?
-		
-		dbg("real path " + p)
-		
-		le = load_exec_from_real_path(p)
-		if le:
-			return le
-		
-		dbg("not loadexec")
-		
-		# filetype?
-		t = type_from_real_path(p)
-		if t != "":
-			# filetype!
-			load = 0xfff000000
-			ft = int(t, 16)
-			load |= ft << 8
-			exec_a = 0
-			
-			load_str = "%08x" % load
-			exec_str = "%08x" % exec_a
-			
-			return load_str, exec_str
-		
+            return -EACCES		
 
 #    This is how we could add stub extended attribute handlers...
 #    (We can't have ones which aptly delegate requests to the underlying fs
@@ -186,13 +186,13 @@ class Xmp(Fuse):
     	dbg("getxattr")
     	if name == "user.econet_exec":
 			dbg("getxattr/exec")
-			load, exec_a = self.load_exec(path)
-			dbg("load " + exec_a)
+			load, exec_a = load_exec(path)
+			dbg("exec " + exec_a)
 			if size == 0:
 				return len(exec_a)
 			return exec_a
     	if name == "user.econet_load":
-			load, exec_a = self.load_exec(path)
+			load, exec_a = load_exec(path)
 			dbg("load " + load)
 			if size == 0:
 				return len(load)
