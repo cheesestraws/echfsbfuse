@@ -80,6 +80,10 @@ def load_exec_from_real_path(path):
 		return ()
 	return xs[0]
 	
+def set_type(path, typestring):
+	src_path = real_path_of(path)
+	os.rename(src_path, path + "," + typestring)
+	
 def load_exec(path):
 	p = real_path_of("." + path)
 	# real load and exec addresses?	
@@ -229,6 +233,13 @@ class Xmp(Fuse):
             # plus null separators.
             return len("".join(aa)) + len(aa)
         return aa
+        
+    def setxattr(self, path, name, value, flags):
+    	if name == "user.econet_load":
+    		# are we setting a filetype?
+    		if value.startswith("fff"):
+    			typestr = value[3:6]
+    			set_type(path,typestr)
 
 
     def statfs(self):
