@@ -99,8 +99,14 @@ def load_exec(path):
 		exec_a = 0
 		
 		# timestamp!
-		s = os.lstat(p)
-		dbg("mtime " + ("%d" % s.st_mtime))
+		info = os.lstat(p)
+		dbg("mtime " + ("%d" % info.st_mtime))
+		
+		low = (info.st_mtime & 255) * 100
+		high = (info.st_mtime / 256) * 100 + (low >> 8) + 0x336e996a
+		
+		load |= (high >> 24)
+		exec_a = (low & 0xff) | (high << 8)
 		
 		load_str = "%08x" % load
 		exec_str = "%08x" % exec_a
