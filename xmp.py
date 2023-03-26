@@ -84,7 +84,7 @@ def load_exec_from_real_path(path):
 def set_type(path, typestring):
 	src_path = real_path_of("." + path)
 	dbg(src_path + " => ." + path + "," + typestring)
-	os.rename("." + src_path, "." + path + "," + typestring)
+	os.rename(src_path, "." + path + "," + typestring)
 	
 def load_exec(path):
 	p = real_path_of("." + path)
