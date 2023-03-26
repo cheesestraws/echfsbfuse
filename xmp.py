@@ -62,7 +62,7 @@ def real_path_of(path):
 			f = re.sub(",[0-9a-fA-F]{3}$", "", i)
 			if f == tail:
 				return head + "/" + i
-			f = re.sub(",[0-9a-fA-F]{8}-[0-9a-fA-F]{8}$", "", i)
+			f = re.sub(",([0-9a-fA-F]{8})-([0-9a-fA-F]{8})$", "", i)
 			if f == tail:
 				return head + "/" + i
 					
