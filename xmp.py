@@ -132,7 +132,7 @@ class Xmp(Fuse):
 
         Fuse.__init__(self, *args, **kw)
 
-        self.root = '/home/cheesey/one'
+        #self.root = '/home/cheesey/one'
 
     def getattr(self, path):
         return os.lstat(real_path_of("." + path))
@@ -372,7 +372,7 @@ Userspace nullfs-alike: mirror the filesystem tree from some point on.
                  usage=usage,
                  dash_s_do='setsingle')
 
-    server.parser.add_option(mountopt="root", metavar="PATH", default='/',
+    server.parser.add_option(mountopt="root", metavar="PATH", default='/mnt/rpc',
                              help="mirror filesystem from under PATH [default: %default]")
     server.parse(values=server, errex=1)
 
