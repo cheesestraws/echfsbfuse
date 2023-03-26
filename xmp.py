@@ -115,7 +115,7 @@ def load_exec(path):
 		dbg("h/l " + ("%d" % high) + " " + ("%d" % low))
 		
 		load |= (high >> 24)
-		exec_a = (low & 0xff) | (high << 8)
+		exec_a = ((low & 0xff) | (high << 8)) & 0xffffffff
 		
 		load_str = "%08x" % load
 		exec_str = "%08x" % exec_a
