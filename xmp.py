@@ -179,12 +179,12 @@ class Xmp(Fuse):
 #        return aa
     
     def getxattr(self, path, name, size):
-    	if name == "econet_exec":
+    	if name == "user.econet_exec":
 			load, exec_a = load_exec(path)
 			if size == 0:
 				return len(exec_a)
 			return exec_a
-    	if name == "econet_load":
+    	if name == "user.econet_load":
 			load, exec_a = load_exec(path)
 			if size == 0:
 				return len(load)
