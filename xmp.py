@@ -179,6 +179,17 @@ class Xmp(Fuse):
 #        return aa
     
     def getxattr(self, path, name, size):
+    	if name == "econet_exec":
+			load, exec_a = load_exec(path)
+			if size == 0:
+				return len(exec_a)
+			return exec_a
+    	if name == "econet_load":
+			load, exec_a = load_exec(path)
+			if size == 0:
+				return len(load)
+			return load
+    
         val = name.swapcase() + '@' + path
         if size == 0:
             # We are asked for size of the value.
