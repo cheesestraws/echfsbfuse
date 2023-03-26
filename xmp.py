@@ -185,7 +185,7 @@ class Xmp(Fuse):
     def getxattr(self, path, name, size):
     	dbg("getxattr")
     	if name == "user.econet_exec":
-    		dbg("getxattr/exec")
+			dbg("getxattr/exec")
 			load, exec_a = self.load_exec(path)
 			dbg("load " + exec_a)
 			if size == 0:
