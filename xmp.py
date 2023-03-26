@@ -46,6 +46,7 @@ def flag2mode(flags):
 def dbg(x):
 #	flog.write(x + "\n")
 # 	flog.flush()
+	return
 
 def real_path_of(path):
 	# if file exists, just return it
