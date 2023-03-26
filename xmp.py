@@ -237,8 +237,9 @@ class Xmp(Fuse):
         return aa
         
     def setxattr(self, path, name, value, flags):
-    	dbg("setxattr")
+    	dbg("setxattr " + name + "=" + value)
     	if name == "user.econet_load":
+    		dbg("setxattr/econet_load")
     		# are we setting a filetype?
     		if value.startswith("fff"):
     			typestr = value[3:6]
