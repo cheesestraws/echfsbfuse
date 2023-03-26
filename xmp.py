@@ -84,7 +84,6 @@ class Xmp(Fuse):
         Fuse.__init__(self, *args, **kw)
 
         self.root = '/home/cheesey/one'
-        dbg("starting at " + self.root)
 
     def getattr(self, path):
         return os.lstat(real_path_of("." + path))
@@ -181,11 +180,13 @@ class Xmp(Fuse):
     def getxattr(self, path, name, size):
     	if name == "user.econet_exec":
 			load, exec_a = load_exec(path)
+			dbg("load " + exec_a)
 			if size == 0:
 				return len(exec_a)
 			return exec_a
     	if name == "user.econet_load":
 			load, exec_a = load_exec(path)
+			dbg("load " + load)
 			if size == 0:
 				return len(load)
 			return load
