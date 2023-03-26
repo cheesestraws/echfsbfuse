@@ -93,7 +93,7 @@ def load_exec(path):
 	t = type_from_real_path(p)
 	if t != "":
 		# filetype!
-		load = 0xfff000000
+		load = 0xfff00000
 		ft = int(t, 16)
 		load |= ft << 8
 		exec_a = 0
