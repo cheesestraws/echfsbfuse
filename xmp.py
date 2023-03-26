@@ -138,9 +138,14 @@ class Xmp(Fuse):
 	def load_exec(self, path):
 		p = real_path_of("." + path)
 		# real load and exec addresses?
+		
+		dbg("real path " + p)
+		
 		le = load_exec_from_real_path(p)
 		if le:
 			return le
+		
+		dbg("not loadexec")
 		
 		# filetype?
 		t = type_from_real_path(p)
@@ -178,6 +183,7 @@ class Xmp(Fuse):
 #        return aa
     
     def getxattr(self, path, name, size):
+    	dbg("getxattr")
     	if name == "user.econet_exec":
 			load, exec_a = load_exec(path)
 			dbg("load " + exec_a)
