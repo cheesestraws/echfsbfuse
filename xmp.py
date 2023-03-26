@@ -177,6 +177,14 @@ class Xmp(Fuse):
 #            # plus null separators.
 #            return len("".join(aa)) + len(aa)
 #        return aa
+    
+    def getxattr(self, path, name, size):
+        val = name.swapcase() + '@' + path
+        if size == 0:
+            # We are asked for size of the value.
+            return len(val)
+        return val
+    
     def listxattr(self, path, size):
         aa = ["user." + a for a in ("econet_exec", "econet_homeof", "econet_load", "econet_owner", "econet_perm")]
         if size == 0:
