@@ -29,7 +29,7 @@ if not hasattr(fuse, '__version__'):
 
 fuse.fuse_python_api = (0, 2)
 
-flog = open("/tmp/flog", "w")
+#flog = open("/tmp/flog", "w")
 
 fuse.feature_assert('stateful_files', 'has_init')
 
@@ -44,8 +44,8 @@ def flag2mode(flags):
     return m
 
 def dbg(x):
-	flog.write(x + "\n")
-	flog.flush()
+#	flog.write(x + "\n")
+# 	flog.flush()
 
 def real_path_of(path):
 	# if file exists, just return it
