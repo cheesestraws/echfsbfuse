@@ -143,6 +143,7 @@ class Xmp(Fuse):
     def readdir(self, path, offset):
         for e in os.listdir("." + path):
             e = re.sub(",[0-9a-fA-F]{3}$", "", e)
+            e = re.sub(",([0-9a-fA-F]{8})-([0-9a-fA-F]{8})$", "", e)
             yield fuse.Direntry(e)
 
     def unlink(self, path):
