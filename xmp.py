@@ -104,11 +104,11 @@ def load_exec(path):
 		
 		dbg("ok...")
 		
-		low = (int(info.st_mtime) & 255) * 100
+		low = int((int(info.st_mtime) & 255) * 100)
 		
 		dbg("low")
 		
-		high = (info.st_mtime / 256) * 100 + (low >> 8) + 0x336e996a
+		high = int((info.st_mtime / 256) * 100 + (low >> 8) + 0x336e996a)
 		
 		dbg("hi")
 		
