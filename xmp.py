@@ -132,7 +132,7 @@ class Xmp(Fuse):
 
         Fuse.__init__(self, *args, **kw)
 
-        #self.root = '/home/cheesey/one'
+        self.root = '/mnt/rpc'
 
     def getattr(self, path):
         return os.lstat(real_path_of("." + path))
