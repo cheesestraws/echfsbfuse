@@ -102,6 +102,8 @@ def load_exec(path):
 		info = os.lstat(p)
 		dbg("mtime " + ("%d" % info.st_mtime))
 		
+		dbg("ok...")
+		
 		low = (info.st_mtime & 255) * 100
 		
 		dbg("low")
