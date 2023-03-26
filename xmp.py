@@ -105,6 +105,9 @@ def load_exec(path):
 		low = (info.st_mtime & 255) * 100
 		high = (info.st_mtime / 256) * 100 + (low >> 8) + 0x336e996a
 		
+		dbg("h/l " + ("%d" % high) + " " + ("%d" % low))
+
+		
 		load |= (high >> 24)
 		exec_a = (low & 0xff) | (high << 8)
 		
