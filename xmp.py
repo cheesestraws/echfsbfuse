@@ -122,6 +122,7 @@ class Xmp(Fuse):
         Fuse.__init__(self, *args, **kw)
 
         self.root = '/mnt/rpc'
+        dbg("Mounting " + self.root)
 
     def getattr(self, path):
         return os.lstat(real_path_of("." + path))
